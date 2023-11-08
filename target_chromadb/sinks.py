@@ -26,12 +26,15 @@ class ChromaSink(BatchSink):
         Args:
             context: Stream partition or context dictionary.
         """
-        self.client = chromadb.Client(
-            chromadb.config.Settings(
-                chroma_db_impl="duckdb+parquet",
-                persist_directory=self.chroma_directory,
-            )
-        )
+        # self.client = chromadb.Client(
+        #     chromadb.config.Settings(
+        #         chroma_db_impl="duckdb+parquet",
+        #         persist_directory=self.chroma_directory,
+        #     )
+        # )
+
+        self.client = chromadb.PersistentClient(path=self.chroma_directory)
+
         self.collection = self.client.create_collection(
             self.collection_name,
             embedding_function=self.embedding_function,
